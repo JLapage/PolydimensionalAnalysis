@@ -1,0 +1,30 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>Polydimensional_Analysis</groupId>
+  <artifactId>Polydimensional_Analysis</artifactId>
+  <version>1.0.0-LIVE</version>
+  <name>hidmap</name>
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>src</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+    </resources>
+  </build>
+  <dependencies>
+  	<dependency>
+  		<groupId>net.imagej</groupId>
+  		<artifactId>ij</artifactId>
+  		<version>1.53g</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.math</groupId>
+  		<artifactId>jama</artifactId>
+  		<version>1.0.3</version>
+  	</dependency>
+  </dependencies>
+</project>
