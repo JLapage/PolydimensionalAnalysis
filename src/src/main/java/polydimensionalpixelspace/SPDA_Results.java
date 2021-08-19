@@ -11,16 +11,16 @@ import ij.measure.ResultsTable;
  * @author John MJ Lapage
  * @version 1.0
  */
-public class PDA_Results {
+public class SPDA_Results {
 	public CompositeImage pdaImp;
 	public double[][] eigenVec;
 	public ResultsTable results,eigenVectorTable, weightingsTable;
 	
-	public PDA_Results(){
+	public SPDA_Results(){
 		
 	}
 	
-	public PDA_Results(ImagePlus imp) {
+	public SPDA_Results(ImagePlus imp) {
 		pdaImp = new CompositeImage(imp);
 	}
 	
@@ -29,8 +29,8 @@ public class PDA_Results {
 	 * 
 	 * @return a duplicate PCA_Results
 	 */
-	public PDA_Results duplicate(){
-		PDA_Results dup = new PDA_Results();
+	public SPDA_Results duplicate(){
+		SPDA_Results dup = new SPDA_Results();
 		if(this.pdaImp!=null){
 			dup.pdaImp = this.pdaImp;
 		}

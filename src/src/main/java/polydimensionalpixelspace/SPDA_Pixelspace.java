@@ -30,7 +30,7 @@ import ij.plugin.filter.GaussianBlur;
  * 
  */
 
-public class PDA_Pixelspace implements PlugIn{
+public class SPDA_Pixelspace implements PlugIn{
 	
 	public static final String[] POSITIONALFORMATS = new String[]{"mtj","mdf","txt","csv","xml"};
 	public static final String[] IMAGEFORMATS = new String[]{"tiff","tif"};
@@ -57,9 +57,9 @@ public class PDA_Pixelspace implements PlugIn{
 	public static void processCurrentImage(boolean useMask, boolean splitMask, boolean covariance, double sigma, boolean kmeansMode, int kGroups, int kIter){
 		IJ.log("Processing Current Image");
 
-			ArrayList<PDA_PS_Image> pcaImages = new ArrayList<PDA_PS_Image>();
-			pcaImages.add(new PDA_PS_Thresholded(IJ.getImage(),useMask,splitMask));
-			PDA_Results result  = coreProcess(pcaImages,true,covariance,sigma, kmeansMode, kGroups,kIter).get(0);
+			ArrayList<SPDA_PS_Image> pcaImages = new ArrayList<SPDA_PS_Image>();
+			pcaImages.add(new SPDA_PS_Thresholded(IJ.getImage(),useMask,splitMask));
+			SPDA_Results result  = coreProcess(pcaImages,true,covariance,sigma, kmeansMode, kGroups,kIter).get(0);
 			result.pdaImp.show();
 			if(!kmeansMode) {
 				result.eigenVectorTable.show("EigenVectors");
@@ -81,12 +81,12 @@ public class PDA_Pixelspace implements PlugIn{
 	 * @param sigma			Value of blurring sigma
 	 * 
 	 */
-	public static ArrayList<PDA_Results> processThresholdedDirectory(String dir, boolean series, boolean useMask, boolean splitMask, boolean covariance, double sigma, boolean kmeansMode, int kGroups, int kIter){
-		ArrayList<PDA_PS_Image> pcaImages = new ArrayList<PDA_PS_Image>();
+	public static ArrayList<SPDA_Results> processThresholdedDirectory(String dir, boolean series, boolean useMask, boolean splitMask, boolean covariance, double sigma, boolean kmeansMode, int kGroups, int kIter){
+		ArrayList<SPDA_PS_Image> pcaImages = new ArrayList<SPDA_PS_Image>();
 		String[] fileNames = new File(dir).list(new QuickFilter(IMAGEFORMATS));
 		for(int i = 0; i<fileNames.length; i++){
 			ImagePlus imp = IJ.openVirtual(dir+fileNames[i]);
-			pcaImages.add(new PDA_PS_Thresholded(imp,useMask,splitMask));
+			pcaImages.add(new SPDA_PS_Thresholded(imp,useMask,splitMask));
 			imp.close();
 		}
 		return coreProcess(pcaImages,series,covariance,sigma, kmeansMode, kGroups,kIter);
@@ -106,10 +106,10 @@ public class PDA_Pixelspace implements PlugIn{
 	 * @param sigma			Value of blurring sigma
 	 * 
 	 */
-	public static ArrayList<PDA_Results> processThresholdedImageSet(ImagePlus[] imps, boolean closeImps, boolean series, boolean useMask, boolean splitMask, boolean covariance, double sigma, boolean kmeansMode, int kGroups, int kIter){
-		ArrayList<PDA_PS_Image> pcaImages = new ArrayList<PDA_PS_Image>();
+	public static ArrayList<SPDA_Results> processThresholdedImageSet(ImagePlus[] imps, boolean closeImps, boolean series, boolean useMask, boolean splitMask, boolean covariance, double sigma, boolean kmeansMode, int kGroups, int kIter){
+		ArrayList<SPDA_PS_Image> pcaImages = new ArrayList<SPDA_PS_Image>();
 		for(int i = 0; i<imps.length; i++){
-			pcaImages.add(new PDA_PS_Thresholded(imps[i],useMask,splitMask));
+			pcaImages.add(new SPDA_PS_Thresholded(imps[i],useMask,splitMask));
 			if(closeImps){
 				imps[i].close();
 			}
@@ -135,7 +135,7 @@ public class PDA_Pixelspace implements PlugIn{
 	 * @param sigma			Value of blurring sigma
 	 * 
 	 */
-	public static ArrayList<PDA_Results> processPositionalDirectory(String dir, String tableFilePath, boolean manual, boolean table, boolean series, boolean useMask, boolean splitMask, boolean covariance, double sigma, boolean kmeansMode, int kGroups, int kIter){
+	public static ArrayList<SPDA_Results> processPositionalDirectory(String dir, String tableFilePath, boolean manual, boolean table, boolean series, boolean useMask, boolean splitMask, boolean covariance, double sigma, boolean kmeansMode, int kGroups, int kIter){
 		File directory = new File(dir);
 		if(!directory.exists()){
 			IJ.showMessage("Invalid Directory");
@@ -162,9 +162,9 @@ public class PDA_Pixelspace implements PlugIn{
 	 * @param sigma			Value of blurring sigma
 	 * 
 	 */
-	public static ArrayList<PDA_Results> processPositional(String dir, String[] fileNames, String tableFilePath, boolean manual, boolean table, boolean series, boolean useMask, boolean splitMask, boolean covariance, double sigma, boolean kMeansMode, int kGroups, int kIter){
+	public static ArrayList<SPDA_Results> processPositional(String dir, String[] fileNames, String tableFilePath, boolean manual, boolean table, boolean series, boolean useMask, boolean splitMask, boolean covariance, double sigma, boolean kMeansMode, int kGroups, int kIter){
 		double[][] dimensions;
-		ArrayList<PDA_PS_Image> pcaImages = new ArrayList<PDA_PS_Image>();
+		ArrayList<SPDA_PS_Image> pcaImages = new ArrayList<SPDA_PS_Image>();
 		String[] maskFiles = new File(dir).list(new QuickFilter(IMAGEFORMATS));
 
 		
@@ -186,7 +186,7 @@ public class PDA_Pixelspace implements PlugIn{
 				String shortName = fileNames[i].split("\\.")[0];
 				for(int j = 0; j<maskFiles.length;j++){
 					if(maskFiles[j].startsWith(shortName)){
-						pcaImages.add(new PDA_PS_Positional(dir+fileNames[i],IJ.openVirtual(dir+maskFiles[j]),splitMask));
+						pcaImages.add(new SPDA_PS_Positional(dir+fileNames[i],IJ.openVirtual(dir+maskFiles[j]),splitMask));
 						continue toploop;
 					}
 					if(j==maskFiles.length-1){
@@ -196,7 +196,7 @@ public class PDA_Pixelspace implements PlugIn{
 					}
 				}
 			} else {
-				pcaImages.add(new PDA_PS_Positional(dir+fileNames[i],(int)Math.round(dimensions[i][1]),(int)Math.round(dimensions[i][2]),(int)Math.round(dimensions[i][3]),(int)Math.round(dimensions[i][4]),dimensions[i][0]));
+				pcaImages.add(new SPDA_PS_Positional(dir+fileNames[i],(int)Math.round(dimensions[i][1]),(int)Math.round(dimensions[i][2]),(int)Math.round(dimensions[i][3]),(int)Math.round(dimensions[i][4]),dimensions[i][0]));
 			}
 		}
 		if(loaded){
@@ -228,9 +228,9 @@ public class PDA_Pixelspace implements PlugIn{
 	 * Core method for processing - takes the ArrayList of PDAImages, implements and returns the analysis
 	 * 
 	 */
-	public static ArrayList<PDA_Results> coreProcess(ArrayList<PDA_PS_Image> pdaImages, boolean series,boolean covariance,double sigma, boolean kMeansMode, int kGroups, int kIter){
+	public static ArrayList<SPDA_Results> coreProcess(ArrayList<SPDA_PS_Image> pdaImages, boolean series,boolean covariance,double sigma, boolean kMeansMode, int kGroups, int kIter){
 		ArrayList<double[]> growList =  new ArrayList<double[]>();
-		ArrayList<PDA_Results> results = new ArrayList<PDA_Results>();
+		ArrayList<SPDA_Results> results = new ArrayList<SPDA_Results>();
 		
 		
 		//Make the kernel
@@ -238,18 +238,18 @@ public class PDA_Pixelspace implements PlugIn{
 
 		if(kMeansMode) {
 			for(int i = 0; i<pdaImages.size(); i++){
-				PDA_PS_Image imp = pdaImages.get(i);
+				SPDA_PS_Image imp = pdaImages.get(i);
 				double[][] sampletable = imp.analyse(kernel);
 				int[] groups = imp.doKMeans(sampletable, kGroups, kIter);
 				ImagePlus kImp = imp.drawKMeansImage(imp.mask,groups);
-				results.add(new PDA_Results(kImp));
+				results.add(new SPDA_Results(kImp));
 			}
 		} else {
 		
 			for(int i = 0; i<pdaImages.size(); i++){
 				if(series){
 					double[][] sampleTable = pdaImages.get(i).analyse(kernel);
-					PDA_Results template = doPCA(sampleTable,covariance);
+					SPDA_Results template = doPCA(sampleTable,covariance);
 					results.add(pdaImages.get(i).getPCAResults(template));
 				} else {
 					growList.addAll(Arrays.asList(pdaImages.get(i).analyse(kernel)));
@@ -258,7 +258,7 @@ public class PDA_Pixelspace implements PlugIn{
 			
 			if(!series){
 				double[][] sampleTable = toArray(growList);
-				PDA_Results template = doPCA(sampleTable,covariance);
+				SPDA_Results template = doPCA(sampleTable,covariance);
 				for(int i = 0; i<pdaImages.size(); i++){
 					results.add(pdaImages.get(i).getPCAResults(template));
 				}
@@ -391,9 +391,9 @@ public class PDA_Pixelspace implements PlugIn{
 	 * @param series	If true, each analysis will have its own eigenvector and weightings table saved. If false, only the first will be saved (as it will be the same for all analyses).
 	 */
 	
-	public static void saveResults(ArrayList<PDA_Results> results, String dir, boolean series){
+	public static void saveResults(ArrayList<SPDA_Results> results, String dir, boolean series){
 		for(int i = 0; i<results.size(); i++){
-			PDA_Results result = results.get(i);
+			SPDA_Results result = results.get(i);
 			String title = result.pdaImp.getTitle();
 			if(series){
 				result.eigenVectorTable.save(dir+title+" EigenVector Table");
@@ -407,8 +407,8 @@ public class PDA_Pixelspace implements PlugIn{
 		}
 	}
 	
-	public static PDA_Results doPCA(double[][] table, boolean covar){
-		PDA_Results results = new PDA_Results();
+	public static SPDA_Results doPCA(double[][] table, boolean covar){
+		SPDA_Results results = new SPDA_Results();
 		int rows = table.length;
 		int columns = table[0].length;
 		
@@ -432,7 +432,7 @@ public class PDA_Pixelspace implements PlugIn{
 		if(covar){
 			
 			for(int y = 0; y<columns;y++){
-				IJ.showStatus("Calculating Covariance "+PDA_Pixelspace.NF.format((double)y/columns*100)+"%");
+				IJ.showStatus("Calculating Covariance "+SPDA_Pixelspace.NF.format((double)y/columns*100)+"%");
 				matrixLog.incrementCounter();
 				for(int x=0; x<columns;x++){
 					double sum = 0.0;
@@ -452,7 +452,7 @@ public class PDA_Pixelspace implements PlugIn{
 			matrixLog.show("Covariance Matrix");
 		} else { // calculate correlation
 			for(int y = 0; y<columns;y++){
-				IJ.showStatus("Calculating Correlation "+PDA_Pixelspace.NF.format((double)y/columns*100)+"%");
+				IJ.showStatus("Calculating Correlation "+SPDA_Pixelspace.NF.format((double)y/columns*100)+"%");
 				matrixLog.incrementCounter();
 				for(int x=0; x<columns;x++){
 					double sumAA = 0.0;
@@ -565,7 +565,7 @@ public class PDA_Pixelspace implements PlugIn{
 	
 	public void run(String arg){
 		if(arg.equals("")){
-			PDA_Pixelspace_Dialog dialog = new PDA_Pixelspace_Dialog();
+			SPDA_Pixelspace_Dialog dialog = new SPDA_Pixelspace_Dialog();
 			dialog.setVisible(true);
 		} else {
 			boolean kMeansMode=false;
@@ -632,7 +632,7 @@ public class PDA_Pixelspace implements PlugIn{
 					kIter = Integer.parseInt(var);
 				}
 			}
-			ArrayList<PDA_Results> results = new ArrayList<PDA_Results>();
+			ArrayList<SPDA_Results> results = new ArrayList<SPDA_Results>();
 			
 			
 			
@@ -641,22 +641,22 @@ public class PDA_Pixelspace implements PlugIn{
 			if(singleMode){
 				if(positional){
 					String dir = new File(filePath).getParentFile().getName();
-					results = PDA_Pixelspace.processPositional(dir, new String[]{filePath}, tablePath, manualInput, tableInput, true, useMask,  splitMask,  covariance,  sigma, kMeansMode, kGroups,kIter);
+					results = SPDA_Pixelspace.processPositional(dir, new String[]{filePath}, tablePath, manualInput, tableInput, true, useMask,  splitMask,  covariance,  sigma, kMeansMode, kGroups,kIter);
 					
 				} else {
-					PDA_Pixelspace.processCurrentImage(useMask,splitMask,covariance,sigma, kMeansMode, kGroups,kIter);
+					SPDA_Pixelspace.processCurrentImage(useMask,splitMask,covariance,sigma, kMeansMode, kGroups,kIter);
 				}
 			} else {
 				
 					if(positional){
-						results = PDA_Pixelspace.processPositionalDirectory(filePath,  tablePath, manualInput, tableInput, seriesMode,  useMask,  splitMask,  covariance,  sigma, kMeansMode, kGroups,kIter);
+						results = SPDA_Pixelspace.processPositionalDirectory(filePath,  tablePath, manualInput, tableInput, seriesMode,  useMask,  splitMask,  covariance,  sigma, kMeansMode, kGroups,kIter);
 					} else {
-						results = PDA_Pixelspace.processThresholdedDirectory( filePath, seriesMode,  useMask,  splitMask,  covariance,  sigma, kMeansMode, kGroups,kIter);
+						results = SPDA_Pixelspace.processThresholdedDirectory( filePath, seriesMode,  useMask,  splitMask,  covariance,  sigma, kMeansMode, kGroups,kIter);
 					}
 			}
 			
 			if(results.size()>0){
-				PDA_Pixelspace.saveResults(results, filePath, seriesMode);
+				SPDA_Pixelspace.saveResults(results, filePath, seriesMode);
 			}
 		}
 		

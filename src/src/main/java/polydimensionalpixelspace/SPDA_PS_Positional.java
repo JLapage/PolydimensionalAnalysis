@@ -30,7 +30,7 @@ import org.w3c.dom.NodeList;
  */
 
 
-public class PDA_PS_Positional extends PDA_PS_Image {
+public class SPDA_PS_Positional extends SPDA_PS_Image {
 	String posPath;
 	
 	/**
@@ -45,7 +45,7 @@ public class PDA_PS_Positional extends PDA_PS_Image {
 	 * @param zDiff		Multiple of z calibration compared to xy calibration (how much bigger is a slice than a pixel)
 	 */
 	
-	public PDA_PS_Positional(String posPath,int width, int height, int slices, int frames,double zDiff){
+	public SPDA_PS_Positional(String posPath,int width, int height, int slices, int frames,double zDiff){
 		this.width=width;
 		this.height = height;
 		this.slices = slices;
@@ -73,11 +73,11 @@ public class PDA_PS_Positional extends PDA_PS_Image {
 	 * @param useMask	True if mask is to be used
 	 */
 	
-	public PDA_PS_Positional(String posPath, ImagePlus maskImp, boolean splitMask){
+	public SPDA_PS_Positional(String posPath, ImagePlus maskImp, boolean splitMask){
 		this(posPath,maskImp.getWidth(), maskImp.getHeight(),maskImp.getNSlices(),maskImp.getNFrames(), maskImp.getCalibration().pixelDepth/ maskImp.getCalibration().pixelWidth);
 		useMask = true;
 		this.splitMask = splitMask;
-		mask = PDA_PS_Image.getMask(maskImp);
+		mask = SPDA_PS_Image.getMask(maskImp);
 		maskImp.close();
 		
 	}
@@ -90,7 +90,7 @@ public class PDA_PS_Positional extends PDA_PS_Image {
 	 * 
 	 * @param markers Arraylist of boolean maps of width/height/slice/frames - one for each channel (i.e. cell type)
 	 */
-	public PDA_PS_Positional(ArrayList<boolean[][][][]> markers){
+	public SPDA_PS_Positional(ArrayList<boolean[][][][]> markers){
 		channels = markers.size();
 		boolean[][][][] chan1 = markers.get(0);
 		width = chan1.length;

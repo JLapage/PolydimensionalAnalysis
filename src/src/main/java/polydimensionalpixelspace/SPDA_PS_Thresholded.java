@@ -19,10 +19,10 @@ import ij.process.ImageProcessor;
  * 
  */
 
-public class PDA_PS_Thresholded extends PDA_PS_Image {
+public class SPDA_PS_Thresholded extends SPDA_PS_Image {
 
 	
-	public PDA_PS_Thresholded(ImagePlus impIn, boolean masked, boolean splitMask){
+	public SPDA_PS_Thresholded(ImagePlus impIn, boolean masked, boolean splitMask){
 		imp=impIn;
 		useMask = masked;
 		this.splitMask = splitMask;
@@ -47,7 +47,7 @@ public class PDA_PS_Thresholded extends PDA_PS_Image {
 		zDiff = calib.pixelHeight/calib.pixelWidth;
 		locationMap = this.thresholdMap();
 		if(useMask){
-			mask = PDA_PS_Image.getMask(imp);
+			mask = SPDA_PS_Image.getMask(imp);
 			channels--;
 		} 
 	}
@@ -73,7 +73,7 @@ public class PDA_PS_Thresholded extends PDA_PS_Image {
 				for(int c = 0; c<channels; c++){
 					ImageProcessor ip = stack.getProcessor(imp.getStackIndex(c+1, z+1, t+1));
 					for(int x = 0; x<width;x++){
-						IJ.showStatus("Logging Pixel Locations "+PDA_Pixelspace.NF.format((double)x/(double)width*100)+"%");
+						IJ.showStatus("Logging Pixel Locations "+SPDA_Pixelspace.NF.format((double)x/(double)width*100)+"%");
 						for(int y=0; y<height; y++){
 							if(ip.getPixel(x,y)==255){
 								map[x][y][z][c][t] = true;

@@ -28,7 +28,7 @@ import ij.process.ImageProcessor;
 import ij.process.LUT;
 import src.main.java.colordistance.Colour_Distance_Analysis;
 
-public abstract class PDA_PS_Image{
+public abstract class SPDA_PS_Image{
 	protected int width,height,channels, frames, slices;
 	protected double zDiff;
 	protected String path, title;
@@ -79,7 +79,7 @@ public abstract class PDA_PS_Image{
 			for(int z = 0; z<slices; z++){
 				for(int x = 0; x<width; x++){
 					float percent = t/(float)frames+(1/(float)frames*z/(float)slices)+(1/(float)slices*x/(float)width);
-					IJ.showStatus(statusString+PDA_Pixelspace.NF.format(percent*100)+"%");
+					IJ.showStatus(statusString+SPDA_Pixelspace.NF.format(percent*100)+"%");
 					for(int y = 0; y<height;y++){
 						float [] pixel  = new float[channels];
 						float sum = 0.0f;
@@ -222,7 +222,7 @@ public abstract class PDA_PS_Image{
 		for(int t = 0; t<frames; t++){
 			for(int z = 0; z<slices; z++){
 				for(int x=0; x<width;x++){
-					IJ.showStatus("Reconstituting blurred image "+PDA_Pixelspace.NF.format((double)x/(double)width)+"%");
+					IJ.showStatus("Reconstituting blurred image "+SPDA_Pixelspace.NF.format((double)x/(double)width)+"%");
 					for(int y=0; y<height; y++){
 						int thisMask = mask[z][t][x][y]-1;
 						if(thisMask == -1){continue;}
@@ -261,7 +261,7 @@ public abstract class PDA_PS_Image{
 		for(int z = 0; z<slices ; z++){
 			for(int t = 0; t<frames; t++){
 				for(int x = 0; x<width; x++){
-					IJ.showStatus("Sampling "+PDA_Pixelspace.NF.format((double)x/(double)width*100)+"%");
+					IJ.showStatus("Sampling "+SPDA_Pixelspace.NF.format((double)x/(double)width*100)+"%");
 					for(int y=0; y<height;y++){
 						int thisMask = mask[z][t][x][y];
 						if(thisMask == 0){continue;}
@@ -282,7 +282,7 @@ public abstract class PDA_PS_Image{
 		
 		//Normalise across colours 
 			for(int i = 0; i<cellProps.size(); i++){
-				IJ.showStatus("Normalising across Colours "+PDA_Pixelspace.NF.format((double)i/(double)cellProps.size()*100)+"%");
+				IJ.showStatus("Normalising across Colours "+SPDA_Pixelspace.NF.format((double)i/(double)cellProps.size()*100)+"%");
 				double[] thisPixel = cellProps.get(i);
 				double sum = 0.0;
 				for(int c = 0; c<channels;c++){
@@ -331,7 +331,7 @@ public abstract class PDA_PS_Image{
 	 * @param eigenvec	The PCA eigenvectors
 	 */
 
-	public PDA_Results getPCAResults(PDA_Results template){
+	public SPDA_Results getPCAResults(SPDA_Results template){
 		double[][] table = applyPCA(template.eigenVec);
 		ResultsTable pcaResults = new ResultsTable();
 	    	
@@ -382,7 +382,7 @@ public abstract class PDA_PS_Image{
 		
 		
 		
-		PDA_Results results = template.duplicate();
+		SPDA_Results results = template.duplicate();
 		results.pdaImp = output;
 		results.results = pcaResults;
 		return results;

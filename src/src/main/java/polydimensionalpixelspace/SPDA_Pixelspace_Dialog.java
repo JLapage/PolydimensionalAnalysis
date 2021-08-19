@@ -21,7 +21,7 @@ import ij.IJ;
 import ij.io.DirectoryChooser;
 import ij.io.OpenDialog;
 
-public class PDA_Pixelspace_Dialog extends JFrame implements ActionListener, ItemListener{
+public class SPDA_Pixelspace_Dialog extends JFrame implements ActionListener, ItemListener{
 	/**
 	 * 
 	 */
@@ -36,7 +36,7 @@ public class PDA_Pixelspace_Dialog extends JFrame implements ActionListener, Ite
 	private JTextField sigmaField, kField, iterField;
 	private JLabel kLabel, iterLabel;
 	
-	public PDA_Pixelspace_Dialog(){
+	public SPDA_Pixelspace_Dialog(){
 		
 		//Mode Panel: PCA or K-Means (Hey! room to expand!!)
 		analysisModePanel = new JPanel();
@@ -199,7 +199,7 @@ public class PDA_Pixelspace_Dialog extends JFrame implements ActionListener, Ite
 	 */
 	public void actionPerformed(ActionEvent e){
 		try{
-			ArrayList<PDA_Results> results = new ArrayList<PDA_Results>();
+			ArrayList<SPDA_Results> results = new ArrayList<SPDA_Results>();
 			String tablePath="", filePath="";
 			int kGroups = 0;
 			int kIter = 100;
@@ -253,10 +253,10 @@ public class PDA_Pixelspace_Dialog extends JFrame implements ActionListener, Ite
 					OpenDialog od = new OpenDialog("Select Positional File");
 					if(od.getPath()!=null){
 						filePath = od.getDirectory();
-						results = PDA_Pixelspace.processPositional(filePath, new String[]{od.getFileName()}, tablePath, manualInput, tableInput, true, useMask,  splitMask,  covariance,  sigma, kmeansMode, kGroups, kIter);
+						results = SPDA_Pixelspace.processPositional(filePath, new String[]{od.getFileName()}, tablePath, manualInput, tableInput, true, useMask,  splitMask,  covariance,  sigma, kmeansMode, kGroups, kIter);
 					}
 				} else {
-					PDA_Pixelspace.processCurrentImage(useMask,splitMask,covariance,sigma, kmeansMode, kGroups, kIter);
+					SPDA_Pixelspace.processCurrentImage(useMask,splitMask,covariance,sigma, kmeansMode, kGroups, kIter);
 				}
 			} else {
 				if(positional){
@@ -268,16 +268,16 @@ public class PDA_Pixelspace_Dialog extends JFrame implements ActionListener, Ite
 				if(dc.getDirectory()!=null){
 					filePath = dc.getDirectory();
 					if(positional){
-						results = PDA_Pixelspace.processPositionalDirectory(filePath,  tablePath,manualInput, tableInput, seriesMode,  useMask,  splitMask,  covariance,  sigma, kmeansMode, kGroups, kIter);
+						results = SPDA_Pixelspace.processPositionalDirectory(filePath,  tablePath,manualInput, tableInput, seriesMode,  useMask,  splitMask,  covariance,  sigma, kmeansMode, kGroups, kIter);
 					} else {
-						results = PDA_Pixelspace.processThresholdedDirectory(filePath, seriesMode,  useMask,  splitMask,  covariance,  sigma, kmeansMode, kGroups, kIter);
+						results = SPDA_Pixelspace.processThresholdedDirectory(filePath, seriesMode,  useMask,  splitMask,  covariance,  sigma, kmeansMode, kGroups, kIter);
 					}
 				}
 				
 			}
 			
 			if(results.size()>0){
-				PDA_Pixelspace.saveResults(results, filePath, seriesMode);
+				SPDA_Pixelspace.saveResults(results, filePath, seriesMode);
 			}
 		} catch (NumberFormatException a){
 			IJ.showMessage("Invalid Input");

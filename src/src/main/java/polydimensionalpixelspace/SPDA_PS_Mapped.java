@@ -12,8 +12,8 @@ import ij.process.FloatProcessor;
  * @version 1.0
  *
  */
-public class PDA_PS_Mapped extends PDA_PS_Image {
-	public PDA_PS_Mapped(ImagePlus imp, boolean masked) {
+public class SPDA_PS_Mapped extends SPDA_PS_Image {
+	public SPDA_PS_Mapped(ImagePlus imp, boolean masked) {
 		this.imp = imp;
 		width = imp.getWidth();
 		height = imp.getHeight();
